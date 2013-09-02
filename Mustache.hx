@@ -55,7 +55,7 @@ class Mustache {
         var beginPosition:Dynamic = beginPattern.matchedPos();
         var endPosition:Dynamic = endPattern.matchedPos();
         var beforeArray:String = template.substring(0, beginPosition.pos);
-        var afterArray:String = template.substring(endPosition.pos + endPosition.len, template.length - 1);
+        var afterArray:String = template.substring(endPosition.pos + endPosition.len, template.length);
         var arrayString:String = template.substring(beginPosition.pos + beginPosition.len, endPosition.pos);
         var value:String = '';
 
