@@ -9,11 +9,13 @@ class Mustache {
         this.template = new String(template);
         this.data = data;
         this.context = data;
+        this.stack = [];
     }
 
     static function main() {
-        var dude:Map<String, Dynamic> = ["name"=> "john", "age"=> 30];
-        trace(Mustache.render("My name is {{#dude}} {{name}} and I'm {{age}} {{/dude}}. {{message}}", [ "dude"=> dude, "message"=> "How are you ?"]));
+        var info:Map<String, Dynamic> = ["situation"=> "Married"];
+        var dude:Map<String, Dynamic> = ["name"=> "john", "age"=> 30, "info"=> info];
+        trace(Mustache.render("My name is {{#dude}}{{name}} and I'm {{age}}. I'm {{#info}}{{situation}}{{/info}}{{/dude}}. {{message}}", [ "dude"=> dude, "message"=> "How are you ?"]));
     }
 
     static function render(template:String, data:Map<String, Dynamic>):String {
@@ -42,19 +44,31 @@ class Mustache {
 
     private function _replaceBlockOpener(pattern:EReg) {
         var expression:String = pattern.matched(3);
+        
         if (context.exists(expression) && Reflect.isObject(context.get(expression))) {
+            stack.push({name: expression, context: context});
             context = context.get(expression);
         }
-        
+    }
+
+    private function _replaceBlockCloser(pattern:EReg) {
+        var expression:String = pattern.matched(3);
+
+        if (stack.length > 0 && expression == stack[stack.length - 1].name) {
+            context = stack.pop().context;
+        }
     }
 
     private function _replacePattern(pattern:EReg) {
         var value:String = '';
+        var fullExpression:String = pattern.matched(2);
 
-        if (pattern.matched(2).length == 0) {
+        if (fullExpression.length == 0) {
             value = _replaceVariable(pattern);
-        } else if (pattern.matched(2) == '#') {
+        } else if (fullExpression == '#') {
             _replaceBlockOpener(pattern);
+        } else if (fullExpression == '/') {
+            _replaceBlockCloser(pattern);
         }
 
         template = pattern.replace(template, value);
