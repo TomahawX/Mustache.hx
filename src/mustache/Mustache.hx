@@ -1,3 +1,5 @@
+package mustache;
+
 class Mustache {
 
     private var template:String;
@@ -12,18 +14,6 @@ class Mustache {
         this.context = data;
         this.stack = [];
         this.replacing = true;
-    }
-
-    static function main() {
-        var data:Dynamic = {
-            dudes: [
-                {name: 'john', 'age': 30, 'info': {situation: 'Married'}},
-                {name: 'charles', 'age': 25, 'info': {situation: 'Single'}}
-            ],
-            message: 'How are you ?'
-        };
-
-        trace(Mustache.render("{{#dudes}}\nMy name is {{name}} and I'm {{age}}. I'm {{#info}}{{situation}}{{/info}}{{/dudes}}. {{message}}", data));
     }
 
     static function render(template:String, data:Dynamic):String {
