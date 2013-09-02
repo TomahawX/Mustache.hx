@@ -1,0 +1,8 @@
+<project name="Mustache" url="https://github.com/dawicorti/Mustache.hx" license="GPL">
+    <user name="dawi"/>
+    <tag v="template"/>
+    <tag v="mustache"/>
+    <tag v="logic-less"/>
+    <description>This project is an example of an haxelib project</description>
+    <version name="1.0">Initial release, everything is working correctly</version>
+</project>
