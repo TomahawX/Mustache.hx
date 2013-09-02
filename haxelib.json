@@ -1,0 +1,12 @@
+{
+    "name": "mustache",
+    "url" : "https://github.com/dawicorti/Mustache.hx",
+    "license": "MIT",
+    "tags": ["utility", "template", "logic-less", "logic", "less", "logicless"],
+    "description": "Implementation of the mustache template system",
+    "version": "0.0.1",
+    "releasenote": "First release",
+    "contributors": ["dawicorti"],
+    "dependencies": {},
+    "classPath": "src/"
+}
