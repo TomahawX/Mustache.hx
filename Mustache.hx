@@ -1,11 +1,11 @@
 class Mustache {
 
     private var template:String;
-    private var data:Map<String, Dynamic>;
-    private var context:Map<String, Dynamic>;
+    private var data:Dynamic;
+    private var context:Dynamic;
     private var stack:Array<Dynamic>;
 
-    private function new(template:String, data:Map<String, Dynamic>) {
+    private function new(template:String, data:Dynamic) {
         this.template = new String(template);
         this.data = data;
         this.context = data;
@@ -13,12 +13,11 @@ class Mustache {
     }
 
     static function main() {
-        var info:Map<String, Dynamic> = ["situation"=> "Married"];
-        var dude:Map<String, Dynamic> = ["name"=> "john", "age"=> 30, "info"=> info];
-        trace(Mustache.render("My name is {{#dude}}{{name}} and I'm {{age}}. I'm {{#info}}{{situation}}{{/info}}{{/dude}}. {{message}}", [ "dude"=> dude, "message"=> "How are you ?"]));
+        var data:Dynamic = {dude: {name: 'john', 'age': 30, 'info': {situation: 'Married'}}, message: 'How are you ?'};
+        trace(Mustache.render("My name is {{#dude}}{{name}} and I'm {{age}}. I'm {{#info}}{{situation}}{{/info}}{{/dude}}. {{message}}", data));
     }
 
-    static function render(template:String, data:Map<String, Dynamic>):String {
+    static function render(template:String, data:Dynamic):String {
         var mustache:Mustache = new Mustache(template, data);
         return mustache._render();
     }
@@ -35,8 +34,8 @@ class Mustache {
         var value:String = '';
         var expression:String = pattern.matched(3);
 
-        if (context.exists(expression)) {
-            value = Std.string(context.get(expression));
+        if (Reflect.hasField(context, expression)) {
+            value = Std.string(Reflect.getProperty(context, expression));
         }
 
         return value;
@@ -45,9 +44,9 @@ class Mustache {
     private function _replaceBlockOpener(pattern:EReg) {
         var expression:String = pattern.matched(3);
         
-        if (context.exists(expression) && Reflect.isObject(context.get(expression))) {
+        if (Reflect.hasField(context, expression) && Reflect.isObject(Reflect.getProperty(context, expression))) {
             stack.push({name: expression, context: context});
-            context = context.get(expression);
+            context = Reflect.getProperty(context, expression);
         }
     }
 
