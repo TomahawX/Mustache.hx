@@ -3,6 +3,7 @@ class Mustache {
     private var template:String;
     private var data:Map<String, Dynamic>;
     private var context:Map<String, Dynamic>;
+    private var stack:Array<Dynamic>;
 
     private function new(template:String, data:Map<String, Dynamic>) {
         this.template = new String(template);
@@ -12,7 +13,7 @@ class Mustache {
 
     static function main() {
         var dude:Map<String, Dynamic> = ["name"=> "john", "age"=> 30];
-        trace(Mustache.render("My name is {{#dude}} {{name}} and I'm {{age}} {{/dude}}", [ "dude"=> dude]));
+        trace(Mustache.render("My name is {{#dude}} {{name}} and I'm {{age}} {{/dude}}. {{message}}", [ "dude"=> dude, "message"=> "How are you ?"]));
     }
 
     static function render(template:String, data:Map<String, Dynamic>):String {
