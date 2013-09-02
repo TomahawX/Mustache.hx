@@ -7,6 +7,5 @@
     "version": "0.0.1",
     "releasenote": "First release",
     "contributors": ["dawicorti"],
-    "dependencies": {},
-    "classPath": "src/"
+    "dependencies": {}
 }
