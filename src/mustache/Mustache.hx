@@ -16,7 +16,7 @@ class Mustache {
         this.replacing = true;
     }
 
-    static function render(template:String, data:Dynamic):String {
+    static public function render(template:String, data:Dynamic):String {
         var mustache:Mustache = new Mustache(template, data);
         return mustache._render();
     }
