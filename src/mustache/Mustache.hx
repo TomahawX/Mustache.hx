@@ -30,15 +30,19 @@ class Mustache {
         return template;
     }
 
+    private function _getValue(key:String):Dynamic {
+        var raw:Dynamic = Reflect.getProperty(context, key);
+        var value:Dynamic = raw;
+        if (Reflect.isFunction(raw)) {
+            value = raw();
+        }
+        return value;
+    }
+
     private function _replaceVariable(pattern:EReg):String {
-        var value:String = '';
         var expression:String = pattern.matched(3);
 
-        if (Reflect.hasField(context, expression)) {
-            value = Std.string(Reflect.getProperty(context, expression));
-        }
-
-        return value;
+        return Std.string(_getValue(expression));
     }
 
     private function _replaceArray(array:Array<Dynamic>, beginPattern:EReg, endPattern:EReg) {
@@ -59,17 +63,17 @@ class Mustache {
     private function _replaceBlockOpener(pattern:EReg) {
         var expression:String = pattern.matched(3);
         
-        if (Std.is(Reflect.getProperty(context, expression), Array)) {
+        if (Std.is(_getValue(expression), Array)) {
             replacing = false;
             var endPattern:EReg = new EReg("{{/" + expression + "}}", 'g');
             if (endPattern.match(template)) {
-                _replaceArray(Reflect.getProperty(context, expression), pattern, endPattern);
+                _replaceArray(_getValue(expression), pattern, endPattern);
             } else {
                 replacing = true;
             }
-        } else if (Reflect.isObject(Reflect.getProperty(context, expression))) {
+        } else if (Reflect.isObject(_getValue(expression))) {
             stack.push({name: expression, context: context});
-            context = Reflect.getProperty(context, expression);
+            context = _getValue(expression);
         }
     }
 
