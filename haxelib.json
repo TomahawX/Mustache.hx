@@ -1,6 +1,6 @@
 {
     "name": "mustache",
-    "url" : "https://github.com/dawicorti/Mustache.hx",
+    "url" : "https://github.com/TomahawX/Mustache.hx",
     "license": "MIT",
     "tags": ["utility", "template", "logic-less", "logic", "less", "logicless"],
     "description": "Implementation of the mustache template system",
