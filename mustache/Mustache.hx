@@ -60,6 +60,21 @@ class Mustache {
         template = beforeArray + value + afterArray;
     }
 
+    function _replaceCondition(condition:Bool, beginPattern:EReg, 
+        endPattern:EReg)
+    {
+        var beginPosition:Dynamic = beginPattern.matchedPos();
+        var endPosition:Dynamic = endPattern.matchedPos();
+        var beforeArray:String = template.substring(0, beginPosition.pos);
+        var afterArray:String = template.substring(endPosition.pos + endPosition.len, template.length);
+        var arrayString:String = template.substring(beginPosition.pos + beginPosition.len, endPosition.pos);
+        var value:String = '';
+
+        if (condition)
+            value = arrayString;
+        template = beforeArray + value + afterArray;
+    }
+
     private function _replaceBlockOpener(pattern:EReg) {
         var expression:String = pattern.matched(3);
         
@@ -71,7 +86,15 @@ class Mustache {
             } else {
                 replacing = true;
             }
-        } else if (Reflect.isObject(_getValue(expression))) {
+        } else if (Std.is(_getValue(expression), Bool)) {
+            replacing = false;
+            var endPattern:EReg = new EReg("{{/" + expression + "\\?}}", 'g');
+            if (endPattern.match(template)) {
+                _replaceCondition(_getValue(expression), pattern, endPattern);
+            } else {
+                replacing = true;
+            }
+        }else if (Reflect.isObject(_getValue(expression))) {
             stack.push({name: expression, context: context});
             context = _getValue(expression);
         }
@@ -103,7 +126,7 @@ class Mustache {
     }
 
     private function _replaceNext():Bool {
-        var pattern:EReg = ~/{{(([#\/]?)([\.\w]+))}}/;
+        var pattern:EReg = ~/{{(([#\/]?)([\.\w\?]+))}}/;
         var replaced:Bool = false; 
         
         if (pattern.match(template)) {
