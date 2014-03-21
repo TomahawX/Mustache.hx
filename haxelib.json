@@ -4,8 +4,8 @@
     "license": "MIT",
     "tags": ["utility", "template", "logic-less", "logic", "less", "logicless"],
     "description": "Implementation of the mustache template system",
-    "version": "0.0.2",
-    "releasenote": "Enable function in data",
-    "contributors": ["dawicorti"],
+    "version": "0.0.3",
+    "releasenote": "Non-False Values",
+    "contributors": ["dawicorti", "imcj"],
     "dependencies": {}
 }
